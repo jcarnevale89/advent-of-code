@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import readline from "readline";
 
-export function trebuchet() {
+export function trebuchetPart1() {
   const filepath = path.resolve(__dirname, "input.txt");
 
   const filestream = fs.createReadStream(filepath, "utf-8");
@@ -27,10 +27,11 @@ export function trebuchet() {
 
 function getNumber(input: string) {
   const numbers = input.match(/\d/g);
+
   if (!numbers) return 0;
 
   const start = numbers[0];
-  const end = numbers.length > 0 ? numbers.pop() : start;
+  const end = numbers.length > 1 ? numbers.pop() : start;
 
   return parseInt(start + end);
 }
