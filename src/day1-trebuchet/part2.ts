@@ -26,23 +26,18 @@ export function trebuchetPart2() {
 }
 
 function getNumber(input: string) {
-  const teest = input.matchAll(
-    /\d|(one)|(two)|(three)|(four)|(five)|(six)|(seven)|(eight)|(nine)/g
-  );
-  console.log([...teest]);
+  const numbers = [
+    ...input.matchAll(
+      /(?=(\d)|(one)|(two)|(three)|(four)|(five)|(six)|(seven)|(eight)|(nine))/g
+    ),
+  ]
+    .flat()
+    .filter((v) => v);
 
-  const numbers = input.match(
-    /\d|(one)|(two)|(three)|(four)|(five)|(six)|(seven)|(eight)|(nine)/g
-  );
   if (!numbers) return 0;
 
-  // console.log(numbers);
-
-  const start = numberTextToNumber(numbers[0]);
-  const end =
-    numbers.length > 1 ? numberTextToNumber(numbers.pop() || "") : start;
-
-  console.log(input, start, end);
+  const start = numberTextToNumber(numbers.at(0));
+  const end = numberTextToNumber(numbers.at(-1));
 
   return parseInt(`${start}${end}`);
 }
@@ -59,7 +54,8 @@ const numberLookupArray = [
   "nine",
 ];
 
-function numberTextToNumber(value: string): number {
+function numberTextToNumber(value?: string): number {
+  if (!value) return 0;
   const lookup = numberLookupArray.findIndex((number) => number === value) + 1;
   return lookup === 0 ? parseInt(value) : lookup;
 }
