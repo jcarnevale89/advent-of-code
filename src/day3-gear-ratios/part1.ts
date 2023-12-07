@@ -1,17 +1,5 @@
 import fs from "fs";
 import path from "path";
-import readline from "readline";
-
-interface Game {
-  id: number;
-  rounds: Round[];
-}
-
-interface Round {
-  blue?: number;
-  green?: number;
-  red?: number;
-}
 
 export function gearRatiosPart1() {
   const filepath = path.resolve(__dirname, "input.txt");
@@ -59,7 +47,6 @@ export function gearRatiosPart1() {
     .flat()
     .map(({ value }) => value);
 
-  // console.log(partNumbers);
   console.log(partNumbers.reduce((acc, partNumber) => acc + partNumber, 0));
 }
 
