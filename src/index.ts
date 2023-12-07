@@ -1,3 +1,3 @@
-import { gearRatiosPart2 } from "./day3-gear-ratios/part2";
+import { scratchcardsPart2 } from "./day4-scratchcards/part2";
 
-gearRatiosPart2();
+scratchcardsPart2();
