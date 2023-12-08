@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 // interface Card {
 //   winningNumbers: number[];
@@ -7,16 +7,16 @@ import path from "path";
 // }
 
 export function scratchcardsPart1() {
-  const filepath = path.resolve(__dirname, "input.txt");
+  const filepath = path.resolve(__dirname, 'input.txt');
 
   const cards = fs
-    .readFileSync(filepath, "utf-8")
-    .split("\n")
+    .readFileSync(filepath, 'utf-8')
+    .split('\n')
     // .slice(0, 4)
     .map((cardString) => {
-      const [, numberString] = cardString.split(":");
+      const [, numberString] = cardString.split(':');
 
-      const [winningNumbersString, yourNumbersString] = numberString.split("|");
+      const [winningNumbersString, yourNumbersString] = numberString.split('|');
 
       const winningNumbers = winningNumbersString
         .trim()
@@ -28,9 +28,7 @@ export function scratchcardsPart1() {
         .split(/\s+/g)
         .map((n) => +n);
 
-      const numberOfMatches = yourNumbers.filter((num) =>
-        winningNumbers.includes(num)
-      );
+      const numberOfMatches = yourNumbers.filter((num) => winningNumbers.includes(num));
 
       return numberOfMatches.length;
     });
@@ -48,6 +46,6 @@ export function scratchcardsPart1() {
 
         return points;
       })
-      .reduce((acc, partNumber) => acc + partNumber, 0)
+      .reduce((acc, partNumber) => acc + partNumber, 0),
   );
 }

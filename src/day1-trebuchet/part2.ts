@@ -1,11 +1,11 @@
-import fs from "fs";
-import path from "path";
-import readline from "readline";
+import fs from 'fs';
+import path from 'path';
+import readline from 'readline';
 
 export function trebuchetPart2() {
-  const filepath = path.resolve(__dirname, "input.txt");
+  const filepath = path.resolve(__dirname, 'input.txt');
 
-  const filestream = fs.createReadStream(filepath, "utf-8");
+  const filestream = fs.createReadStream(filepath, 'utf-8');
 
   const rl = readline.createInterface({
     input: filestream,
@@ -14,22 +14,20 @@ export function trebuchetPart2() {
 
   let total = 0;
 
-  rl.on("line", (line) => {
+  rl.on('line', (line) => {
     const value = getNumber(line);
     console.log(line, value);
     total += value;
   });
 
-  rl.on("close", () => {
+  rl.on('close', () => {
     console.log(total);
   });
 }
 
 function getNumber(input: string) {
   const numbers = [
-    ...input.matchAll(
-      /(?=(\d)|(one)|(two)|(three)|(four)|(five)|(six)|(seven)|(eight)|(nine))/g
-    ),
+    ...input.matchAll(/(?=(\d)|(one)|(two)|(three)|(four)|(five)|(six)|(seven)|(eight)|(nine))/g),
   ]
     .flat()
     .filter((v) => v);
@@ -42,17 +40,7 @@ function getNumber(input: string) {
   return parseInt(`${start}${end}`);
 }
 
-const numberLookupArray = [
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
-];
+const numberLookupArray = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 
 function numberTextToNumber(value?: string): number {
   if (!value) return 0;

@@ -1,11 +1,11 @@
-import fs from "fs";
-import path from "path";
-import readline from "readline";
+import fs from 'fs';
+import path from 'path';
+import readline from 'readline';
 
 export function trebuchetPart1() {
-  const filepath = path.resolve(__dirname, "input.txt");
+  const filepath = path.resolve(__dirname, 'input.txt');
 
-  const filestream = fs.createReadStream(filepath, "utf-8");
+  const filestream = fs.createReadStream(filepath, 'utf-8');
 
   const rl = readline.createInterface({
     input: filestream,
@@ -14,13 +14,13 @@ export function trebuchetPart1() {
 
   let total = 0;
 
-  rl.on("line", (line) => {
+  rl.on('line', (line) => {
     const value = getNumber(line);
     console.log(line, value);
     total += value;
   });
 
-  rl.on("close", () => {
+  rl.on('close', () => {
     console.log(total);
   });
 }

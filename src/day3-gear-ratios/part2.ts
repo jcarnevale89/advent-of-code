@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 interface PartNumber {
   start: number;
@@ -12,11 +12,11 @@ interface Gear {
 }
 
 export function gearRatiosPart2() {
-  const filepath = path.resolve(__dirname, "input.txt");
+  const filepath = path.resolve(__dirname, 'input.txt');
 
   const rows = fs
-    .readFileSync(filepath, "utf-8")
-    .split("\n")
+    .readFileSync(filepath, 'utf-8')
+    .split('\n')
     // .slice(0, 4)
     .map((row) => {
       const numbers = [...row.matchAll(/\d+/g)].map((match) => {
@@ -62,20 +62,12 @@ export function gearRatiosPart2() {
 
       if (previousRow)
         numbers.push(
-          ...previousRow.numbers.filter((number) =>
-            getNumbersFromIndex(number, gear.index)
-          )
+          ...previousRow.numbers.filter((number) => getNumbersFromIndex(number, gear.index)),
         );
-      numbers.push(
-        ...row.numbers.filter((number) =>
-          getNumbersFromIndex(number, gear.index)
-        )
-      );
+      numbers.push(...row.numbers.filter((number) => getNumbersFromIndex(number, gear.index)));
       if (nextRow)
         numbers.push(
-          ...nextRow.numbers.filter((number) =>
-            getNumbersFromIndex(number, gear.index)
-          )
+          ...nextRow.numbers.filter((number) => getNumbersFromIndex(number, gear.index)),
         );
 
       return numbers;
@@ -87,7 +79,7 @@ export function gearRatiosPart2() {
       .flat()
       .filter((v) => v.length === 2)
       .map((v) => v[0].value * v[1].value)
-      .reduce((acc, gearRatio) => acc + gearRatio, 0)
+      .reduce((acc, gearRatio) => acc + gearRatio, 0),
   );
 }
 

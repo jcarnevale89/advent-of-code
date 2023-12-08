@@ -1,12 +1,12 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 export function gearRatiosPart1() {
-  const filepath = path.resolve(__dirname, "input.txt");
+  const filepath = path.resolve(__dirname, 'input.txt');
 
   const rows = fs
-    .readFileSync(filepath, "utf-8")
-    .split("\n")
+    .readFileSync(filepath, 'utf-8')
+    .split('\n')
     // .slice(0, 2)
     .map((row) => {
       const numbers = [...row.matchAll(/\d+/g)].map((match) => {
@@ -41,7 +41,7 @@ export function gearRatiosPart1() {
         ({ start, end }) =>
           checkRowForSymbol(previousRow, start, end) ||
           checkRowForSymbol(row.row, start, end) ||
-          checkRowForSymbol(nextRow, start, end)
+          checkRowForSymbol(nextRow, start, end),
       );
     })
     .flat()
@@ -50,11 +50,7 @@ export function gearRatiosPart1() {
   console.log(partNumbers.reduce((acc, partNumber) => acc + partNumber, 0));
 }
 
-function checkRowForSymbol(
-  row: string | undefined,
-  start: number,
-  end: number
-) {
+function checkRowForSymbol(row: string | undefined, start: number, end: number) {
   if (!row) return false;
   const rowBlock = row.substring(start, end + 1);
   return rowBlock.search(/[^\d.]/g) > -1;

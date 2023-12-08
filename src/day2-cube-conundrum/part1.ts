@@ -1,6 +1,7 @@
-import fs from "fs";
-import path from "path";
-import readline from "readline";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import fs from 'fs';
+import path from 'path';
+import readline from 'readline';
 
 interface Game {
   id: number;
@@ -14,9 +15,9 @@ interface Round {
 }
 
 export function cubeConundrumPart1() {
-  const filepath = path.resolve(__dirname, "input.txt");
+  const filepath = path.resolve(__dirname, 'input.txt');
 
-  const filestream = fs.createReadStream(filepath, "utf-8");
+  const filestream = fs.createReadStream(filepath, 'utf-8');
 
   const rl = readline.createInterface({
     input: filestream,
@@ -25,13 +26,13 @@ export function cubeConundrumPart1() {
 
   let total = 0;
 
-  rl.on("line", (line) => {
+  rl.on('line', (line) => {
     const game = parseGame(line);
 
     if (isGameValid(game)) total += game.id;
   });
 
-  rl.on("close", () => {
+  rl.on('close', () => {
     console.log(total);
   });
 }
@@ -54,13 +55,11 @@ function isGameValid(game: Game) {
 }
 
 function parseGame(input: string): Game {
-  const [gameString, roundsString] = input.split(":");
+  const [gameString, roundsString] = input.split(':');
 
-  const id = gameString.trim().replace("Game", "");
+  const id = gameString.trim().replace('Game', '');
 
-  const rounds = roundsString
-    .split(";")
-    .map((roundString) => parseRound(roundString.trim()));
+  const rounds = roundsString.split(';').map((roundString) => parseRound(roundString.trim()));
 
   return {
     id: +id,
@@ -69,8 +68,8 @@ function parseGame(input: string): Game {
 }
 
 function parseRound(input: string): Round {
-  const values = input.split(",").map((v) => {
-    const [count, color] = v.trim().split(" ");
+  const values = input.split(',').map((v) => {
+    const [count, color] = v.trim().split(' ');
     return [color, +count];
   });
 

@@ -1,84 +1,146 @@
-import fs from "fs";
-import path from "path";
+// Could not figure it out. Got the solution from here
+// https://github.com/burkayanduv/advent-of-code-2023/blob/main/src/d5/p2.ts
+
+import fs from 'fs';
+import path from 'path';
 
 export function ifYouGiveASeedAFertilizerPart2() {
-  const filepath = path.resolve(__dirname, "input.txt");
+  const filepath = path.resolve(__dirname, 'input.txt');
 
-  const almanacRawStrings = fs
-    .readFileSync(filepath, "utf-8")
-    .split(/[\r\n]{2}/)
-    .map((dataString) => {
-      const [, data] = dataString.split(/:\s?\n?/);
-      return data;
-      // return data.split(/\n/).map((str) => str.split(" ").map((num) => +num));
-    });
+  const input = fs.readFileSync(filepath, 'utf-8');
 
-  const [seedString, ...almanacMapStrings] = almanacRawStrings;
+  const result = solution(input);
 
-  const seedGroups = seedString.match(/[\d]+\s[\d]+/g) || [];
-  // const seeds = seedGroups.reduce((acc, seedGroup) => {
-  //   const [seed, length] = seedGroup.split(" ").map((v) => +v);
-  //   // for (let i = seed; i < seed + length; i++) {
-  //   //   acc.push(i);
-  //   // }
+  console.log(result);
+}
 
-  //   return acc;
-  // }, [] as number[]);
-  const seeds = seedGroups.map((seedGroup) =>
-    seedGroup.split(" ").map((v) => +v)
-  );
+export function solution(input: string): number {
+  class Range {
+    constructor(
+      public readonly start: number,
+      public readonly end: number,
+      public isTransformed = false,
+    ) {}
 
-  const almanacMaps = almanacMapStrings.map((almanacString) =>
-    almanacString.split(/\n/).map((str) => str.split(" ").map((num) => +num))
-  );
-
-  console.log(seeds);
-
-  let minLocation = 0;
-
-  seeds.forEach(([seed, length]) => {
-    for (let i = seed; i < seed + length; i++) {
-      minLocation = Math.min(minLocation, getSeedLocation(i));
+    get length(): number {
+      return this.end - this.start;
     }
-  });
 
-  console.log(minLocation);
+    public getIntersection(range: Range): Range | null {
+      if (this.end <= range.start || this.start >= range.end) return null;
+      return new Range(Math.max(this.start, range.start), Math.min(this.end, range.end));
+    }
 
-  function getSeedLocation(seed: number) {
-    return almanacMaps.reduce((acc, map) => {
-      const entry = map.find(([, sourceRangeStart, rangeLength]) => {
-        return (
-          acc >= sourceRangeStart && acc <= sourceRangeStart + rangeLength - 1
-        );
-      });
-
-      if (entry) {
-        const [destinationRangeStart, sourceRangeStart, rangeLength] = entry;
-
-        acc = destinationRangeStart + (acc - sourceRangeStart);
+    public subtractIntersection(intersection: Range): Range[] {
+      const result: Range[] = [];
+      if (this.start < intersection.start) {
+        result.push(new Range(this.start, intersection.start));
       }
-
-      return acc;
-    }, seed);
+      if (this.end > intersection.end) {
+        result.push(new Range(intersection.end, this.end));
+      }
+      return result;
+    }
   }
 
-  // const seedLocations = seeds.map((seed) => {
-  //   return almanacMaps.reduce((acc, map) => {
-  //     const entry = map.find(([, sourceRangeStart, rangeLength]) => {
-  //       return (
-  //         acc >= sourceRangeStart && acc <= sourceRangeStart + rangeLength - 1
-  //       );
-  //     });
+  class GardenMap {
+    public destination: Range;
+    public source: Range;
 
-  //     if (entry) {
-  //       const [destinationRangeStart, sourceRangeStart, rangeLength] = entry;
+    constructor(mapStr: string) {
+      const [destinationStart, sourceStart, length] = mapStr
+        .split(' ')
+        .filter((str) => str !== '')
+        .map(Number);
 
-  //       acc = destinationRangeStart + (acc - sourceRangeStart);
-  //     }
+      this.destination = new Range(destinationStart, destinationStart + length);
+      this.source = new Range(sourceStart, sourceStart + length);
+    }
 
-  //     return acc;
-  //   }, seed);
-  // });
+    get offset(): number {
+      return this.destination.start - this.source.start;
+    }
 
-  // console.log(Math.min(...seedLocations));
+    public transformRange(inputRange: Range): Range[] {
+      if (inputRange.isTransformed) return [inputRange];
+
+      const intersection = this.source.getIntersection(inputRange);
+
+      if (!intersection) return [inputRange];
+
+      const transformed = new Range(
+        intersection.start + this.offset,
+        intersection.end + this.offset,
+        true,
+      );
+
+      return [transformed, ...inputRange.subtractIntersection(intersection)];
+    }
+  }
+
+  const parseSeedRanges = (line: string): Range[] => {
+    const numbers = line
+      .split(':')[1]
+      .split(' ')
+      .filter((number) => number !== '')
+      .map(Number);
+
+    const ranges: Range[] = [];
+    for (let i = 0; i < numbers.length; i += 2) {
+      ranges.push(new Range(numbers[i], numbers[i] + numbers[i + 1]));
+    }
+
+    return ranges;
+  };
+
+  const parseGardenMapGroups = (lines: string[]): GardenMap[][] => {
+    const gardenMapGroups: GardenMap[][] = [];
+    lines.forEach((line) => {
+      if (line === '') {
+        gardenMapGroups.push([]);
+        return;
+      }
+      if (line.endsWith(':')) return;
+      gardenMapGroups[gardenMapGroups.length - 1].push(new GardenMap(line));
+    });
+    return gardenMapGroups;
+  };
+
+  const resetTransformed = (ranges: Range[]): void => {
+    for (const range of ranges) {
+      range.isTransformed = false;
+    }
+  };
+
+  const calculateGardenMapGroupTransform = (
+    ranges: Range[],
+    gardenMapGroup: GardenMap[],
+  ): Range[] => {
+    for (const gardenMap of gardenMapGroup) {
+      ranges = ranges.flatMap((range) => gardenMap.transformRange(range));
+    }
+    return ranges;
+  };
+
+  const calculateSeedLocation = (ranges: Range[], gardenMapGroups: GardenMap[][]): Range[] => {
+    for (const gardenMapGroup of gardenMapGroups) {
+      resetTransformed(ranges);
+      ranges = calculateGardenMapGroupTransform(ranges, gardenMapGroup);
+    }
+    return ranges;
+  };
+
+  const getMin = (ranges: Range[]): number => {
+    let min = Infinity;
+    for (const range of ranges) {
+      min = Math.min(min, range.start);
+    }
+    return min;
+  };
+
+  const lines = input.split('\n').map((line) => line.trim());
+  const seedRanges = parseSeedRanges(lines[0]);
+  const gardenMapGroups = parseGardenMapGroups(lines.slice(1));
+
+  return getMin(calculateSeedLocation(seedRanges, gardenMapGroups));
 }
