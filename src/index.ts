@@ -1,3 +1,3 @@
-import { ifYouGiveASeedAFertilizerPart2 } from './day5-if-you-give-a-seed-a-fertilizer/part2';
+import { waitForItPart2 } from './day6-wait-for-it/part2';
 
-ifYouGiveASeedAFertilizerPart2();
+waitForItPart2();
