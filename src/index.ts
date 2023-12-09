@@ -1,3 +1,3 @@
-import { waitForItPart2 } from './day6-wait-for-it/part2';
+import { camelCardsPart1 } from './day7-camel-cards/part1';
 
-waitForItPart2();
+camelCardsPart1();
