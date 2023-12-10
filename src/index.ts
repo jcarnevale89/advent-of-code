@@ -1,3 +1,3 @@
-import { camelCardsPart2 } from './day7-camel-cards/part2';
+import { hauntedWastelandPart1 } from './day8-haunted-wasteland/part1';
 
-camelCardsPart2();
+hauntedWastelandPart1();
