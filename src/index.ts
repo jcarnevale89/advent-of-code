@@ -1,3 +1,3 @@
-import { hauntedWastelandPart1 } from './day8-haunted-wasteland/part1';
+import { hauntedWastelandPart2 } from './day8-haunted-wasteland/part2';
 
-hauntedWastelandPart1();
+hauntedWastelandPart2();
