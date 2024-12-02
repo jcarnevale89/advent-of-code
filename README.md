@@ -1,29 +1,31 @@
-# Advent Of Code
+# 🎅🎄 Advent Of Code 🎄🎅
 
-## Installation
-
-> npm i
+[Advent of Code](https://adventofcode.com/)
 
 ## Setup
 
-Install all dependencies by running
+Install dependencies:
 
 ```
-npm 1
+npm i
 ```
 
-To setup a new day in the current year's challenge run:
+Setup a new day:
 
 ```
 npm run day:setup -- --day <day>
 ```
 
-## Running
+Run day solutions:
 
-To run a challenge solution
+> If no part provided, it will run both parts.
 
 ```
 npm run day:run -- --day <day> --part <part>
 ```
 
-If no part provided, it will run both parts.
+For automatic puzzle input retrieval, define .env file with session cookie from [adventofcode.com](https://adventofcode.com/):
+
+```
+AOC_SESSION=""
+```

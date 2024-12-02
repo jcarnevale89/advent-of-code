@@ -34,7 +34,10 @@ import yargs from 'yargs';
     })
     .parseSync();
 
-  consola.box(`🎅🎄 Advent of Code 🎄🎅`);
+  consola.box(`
+🎅🎄 Advent of Code 🎄🎅
+          ${year}
+`);
 
   const yearDir = path.resolve('src', year.toString());
   const dayDir = path.join(yearDir, `Day ${day}`);
@@ -46,14 +49,18 @@ import yargs from 'yargs';
     return;
   }
 
-  consola.start(`Starting Day ${day}...`);
+  consola.start(`Running Day ${day}...`);
 
   const { part1, part2 } = await import(sourceFile);
 
   if (!part || part === 1) {
-    consola.box('🌲 Part One:', '\n\n', await part1());
+    consola.info('🌲 Part One:', await part1());
   }
   if (!part || part === 2) {
-    consola.box('🌲 Part Two:', '\n\n', await part2());
+    consola.info('🌲 Part Two:', await part2());
   }
+
+  // This is a hack to get the console to print a newline
+  // Also just console instead of consola to omit the timestamp
+  console.log('\n');
 })();

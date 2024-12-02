@@ -24,9 +24,12 @@ import yargs from 'yargs';
     })
     .parseSync();
 
-  consola.box(`🎅🎄 Advent of Code 🎄🎅`);
+  consola.box(`
+🎅🎄 Advent of Code 🎄🎅
+          ${year}
+`);
 
-  consola.start(`Setting up Day ${day}, Year ${year}.`);
+  consola.start(`Setting up Day ${day}.`);
 
   const yearDir = path.resolve('src', year.toString());
   const dayDir = path.join(yearDir, `Day ${day}`);
@@ -36,13 +39,11 @@ import yargs from 'yargs';
   // If year doesn't exist, create it
   if (!fs.existsSync(yearDir)) {
     fs.mkdirSync(yearDir);
-    consola.success(`Created ${year} folder.`);
   }
 
   // If day doesn't exist, create it
   if (!fs.existsSync(dayDir)) {
     fs.mkdirSync(dayDir);
-    consola.success(`Created ${day} folder.`);
   }
 
   consola.start(`Fetching input...`);
@@ -76,7 +77,7 @@ export async function part2 () {
     );
   }
 
-  consola.success(`Created day ${day} in ${year}!`);
+  consola.success(`Created day ${day}!`);
 })();
 
 function getInput(year: number, day: number) {
