@@ -13,12 +13,31 @@ export async function part1() {
   return validReports.length;
 }
 
+// Could not figure it out. Got the solution from here:
+// https://github.com/CodingAP/advent-of-code/blob/main/puzzles/2024/day02/solution.ts
 export async function part2() {
   const filepath = path.resolve(__dirname, 'input.txt');
 
   const file = fs.readFileSync(filepath, 'utf-8');
 
-  const data = file.split(/\n/);
+  const lists = file
+    .trim()
+    .split('\n')
+    .map((line) => line.split(' ').map((num) => parseInt(num)));
+
+  // find how many lists with one removed element are safe
+  return lists.reduce((sum, list) => {
+    let isSafe = false;
+
+    for (let j = 0; j < list.length; j++) {
+      const newNumbers = [...list];
+      newNumbers.splice(j, 1);
+      if (testSafety(newNumbers)) isSafe = true;
+    }
+
+    if (isSafe) sum++;
+    return sum;
+  }, 0);
 }
 
 function checkIncDec(report: number[]) {
@@ -52,3 +71,15 @@ function checkAdjacentLevels(report: number[]) {
 
   return true;
 }
+
+const testSafety = (list: number[]): boolean => {
+  let isSafe = true,
+    increasing = Math.sign(list[0] - list[1]);
+
+  for (let j = 1; j < list.length; j++) {
+    const diff = list[j - 1] - list[j];
+    if (Math.abs(diff) < 1 || Math.abs(diff) > 3 || Math.sign(diff) !== increasing) isSafe = false;
+  }
+
+  return isSafe;
+};
