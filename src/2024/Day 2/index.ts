@@ -1,18 +1,24 @@
 import fs from 'fs';
 import path from 'path';
 
-export default function () {
+export async function part1() {
   const filepath = path.resolve(__dirname, 'input.txt');
 
   const file = fs.readFileSync(filepath, 'utf-8');
 
   const data = file.split(/\n/).map((str) => str.split(/\s+/).map((s) => +s));
 
-  const validReports = data
-    .filter((report) => !checkAdjacentLevels(report))
-    .filter((report) => !checkIncDec(report));
+  const validReports = data.filter(checkAdjacentLevels).filter(checkIncDec);
 
   return validReports.length;
+}
+
+export async function part2() {
+  const filepath = path.resolve(__dirname, 'input.txt');
+
+  const file = fs.readFileSync(filepath, 'utf-8');
+
+  const data = file.split(/\n/);
 }
 
 function checkIncDec(report: number[]) {

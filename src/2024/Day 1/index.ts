@@ -1,7 +1,37 @@
 import fs from 'fs';
 import path from 'path';
 
-export default function () {
+export async function part1() {
+  const filepath = path.resolve(__dirname, 'input.txt');
+
+  const file = fs.readFileSync(filepath, 'utf-8');
+
+  const data = file
+    .trim()
+    .split(/\n/)
+    .map((str) => str.split(/\s+/));
+
+  const list1: number[] = [];
+  const list2: number[] = [];
+
+  data.forEach(([a, b]) => {
+    list1.push(+a);
+    list2.push(+b);
+  });
+
+  list1.sort((a, b) => a - b);
+  list2.sort((a, b) => a - b);
+
+  let differenceTotal = 0;
+
+  for (let i = 0; i < list1.length; i++) {
+    differenceTotal += Math.abs(list1[i] - list2[i]);
+  }
+
+  return differenceTotal;
+}
+
+export async function part2() {
   const filepath = path.resolve(__dirname, 'input.txt');
 
   const file = fs.readFileSync(filepath, 'utf-8');
